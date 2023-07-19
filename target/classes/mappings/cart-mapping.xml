@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CART">
+	  
+ <insert id="INSERT" parameterType="cart"  >
+   insert into CartTBL(cartId,custNo, productId, amount )
+   values (seq_CartTBL.nextval ,#{custNo}, #{productId}, #{amount})
+ </insert>
+ 
+ 
+  <insert id="OrderJumunseo" parameterType="OrderJumunseo"  >
+   insert into OrderJumunseo(idx,custNo, cartId , productId, productName , amount, orderG )
+   values (seq_CartTBL.nextval ,#{custNo},#{cartId}, #{productId},#{productName}, #{amount} , #{orderG} )
+ </insert>
+ 
+ <insert id="OrderMoney" parameterType="OrderMoney"  >
+   insert into OrderMoney(idx,custNo, baesongbi , totalmoney )
+   values (seq_CartTBL.nextval ,#{OcustNo},#{baesongbi}, #{totalmoney} )
+ </insert>
+ <select id="orderG"  parameterType="OrderMoney"  resultType="OrderMoney" >
+   select  max(idx) idx  from  orderMoney
+   where CUSTNO =#{OcustNo}
+ </select>
+ 
+ <delete id="DELETEONE" parameterType="cart"  >
+   delete from CartTBL where cartId = #{cartId}
+ </delete>
+
+ <delete id="DELETEALL" parameterType="cart"  >
+   delete from CartTBL where custno = #{custNo}
+ </delete>
+ 
+ <delete id="UPDATE" parameterType="cart"  >
+   update CartTBL set amount=#{amount} where  cartId = #{cartId}
+ </delete>
+ 
+ <select id="SELECT" resultType="cart" >
+ 
+ select cartId, c.productId, productName,
+        productPrice, amount, productImg as productImgStr
+ from CartTBL c join productTBL p
+ on c.productId = p.productId
+ where custNo= #{custNo}
+ 
+ </select>
+</mapper>	
